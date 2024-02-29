@@ -24,12 +24,13 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref} from 'vue';
+
 
 // 消息数组
 const messages = ref([]);
 
-const socket = ref({})
+const ws = ref({})
 
 // 新消息
 const newMessage = ref('');
@@ -43,37 +44,36 @@ function sendMessage() {
       username: 'You', // 暂时标识为'You'——在实际应用中，你会根据用户数据来设置
       isMine: true
     };
-
-    messages.value.push(message);
+    let text_data = JSON.stringify(message)
+    ws.value.send(text_data)
+    // messages.value.push(message);
     newMessage.value = ''; // 清空输入框
   }
 }
 
 function initWebSocket(){
-  socket.value =  WebSocket('ws://localhost:8000/chat/')
-  socket.value.onopen = onOpen()
-  socket.value.onclose = onClose()
-  socket.value.onerror = onError()
-  socket.value.onmessage = onMessage()
+  ws.value = new WebSocket(`ws://127.0.0.1:8000/chat/`)
+  //  //连接发生错误的回调方法
+  ws.value.onerror = function () {
+    console.log("ws连接发生错误");
+  };
+  //连接成功建立的回调方法
+  ws.value.onopen = function () {
+    console.log("ws连接成功");
+  }
+  //接收到消息的回调方法
+  ws.value.onmessage = function (event) {
+    const message = JSON.parse(event.data)
+    messages.value.push(message);
+  }
+  //连接关闭的回调方法
+  ws.value.onclose = function () {
+    console.log("ws连接关闭");
+  }
 }
 
 initWebSocket()
 
-function onOpen(){
-
-}
-
-function onClose(){
-
-}
-
-function onError(){
-
-}
-
-function onMessage() {
-
-}
 
 </script>
 
