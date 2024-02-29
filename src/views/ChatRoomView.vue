@@ -29,6 +29,8 @@ import { ref } from 'vue';
 // 消息数组
 const messages = ref([]);
 
+const socket = ref({})
+
 // 新消息
 const newMessage = ref('');
 
@@ -46,6 +48,33 @@ function sendMessage() {
     newMessage.value = ''; // 清空输入框
   }
 }
+
+function initWebSocket(){
+  socket.value =  WebSocket('ws://localhost:8000/chat/')
+  socket.value.onopen = onOpen()
+  socket.value.onclose = onClose()
+  socket.value.onerror = onError()
+  socket.value.onmessage = onMessage()
+}
+
+initWebSocket()
+
+function onOpen(){
+
+}
+
+function onClose(){
+
+}
+
+function onError(){
+
+}
+
+function onMessage() {
+
+}
+
 </script>
 
 <style scoped>
