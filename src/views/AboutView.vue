@@ -11,7 +11,9 @@ import {ref} from "vue";
 import { onMounted } from 'vue'
 import axios from "axios";
 
-let teststring = ref('')
+const teststring = ref('')
+
+
 
 function foo() {
   axios({
