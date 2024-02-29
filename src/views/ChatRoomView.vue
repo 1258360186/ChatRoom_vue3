@@ -60,7 +60,7 @@ function sendMessage() {
 }
 
 function initWebSocket(){
-  ws.value = new WebSocket(`ws://127.0.0.1:8000/chat/`)
+  ws.value = new WebSocket(`ws://127.0.0.1:8000/chat/room_name/`)
   //  //连接发生错误的回调方法
   ws.value.onerror = function () {
     console.log("ws连接发生错误");
@@ -71,7 +71,7 @@ function initWebSocket(){
   }
   //接收到消息的回调方法
   ws.value.onmessage = function (event) {
-    const message = JSON.parse(event.data)
+    const message = JSON.parse(event.data).message
     messages.value.push(message);
     scrollToBottom();
   }
