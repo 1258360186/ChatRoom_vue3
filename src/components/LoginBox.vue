@@ -17,8 +17,9 @@
 </template>
 
 <script setup>
-import {reactive,defineEmits} from 'vue';
+import {reactive, defineEmits,} from 'vue';
 import { useRouter } from 'vue-router';
+import axios from "axios";
 
 const router = useRouter();
 
@@ -33,8 +34,15 @@ const emit = defineEmits(['switchState'])
 const submitLogin = () => {
   // 这里添加登录逻辑
   console.log('登录信息', loginInfo);
-  // 假设登录成功后，导航至聊天室页面
-  router.push('/chatroom');
+  axios({
+    method:'POST',
+    url:'http://localhost:8000/api/login'
+  }).then((res)=>{
+    console.log(res)
+    if(res.data.state){
+      router.push('/chatroom')
+    }
+  })
 };
 
 const switchToRegister = () => {
