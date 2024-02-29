@@ -20,7 +20,7 @@
 import {reactive, defineEmits,} from 'vue';
 import { useRouter } from 'vue-router';
 import axios from "axios";
-
+import Qs from "qs"
 const router = useRouter();
 
 const loginInfo = reactive({
@@ -36,7 +36,8 @@ const submitLogin = () => {
   console.log('登录信息', loginInfo);
   axios({
     method:'POST',
-    url:'http://localhost:8000/api/login'
+    url:'http://localhost:8000/api/login/',
+    data:Qs.stringify(loginInfo)
   }).then((res)=>{
     console.log(res)
     if(res.data.state){
