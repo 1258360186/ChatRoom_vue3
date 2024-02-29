@@ -1,10 +1,12 @@
 <template>
   <div class="auth-container">
     <h2>登录</h2>
+    <span v-if="showError" style="color: red;">{{error}}</span>
     <form @submit.prevent="submitLogin">
       <div class="input-group">
         <label for="login-name">用户名:</label>
         <input id="login-name" type="text" v-model="loginInfo.name" required>
+
       </div>
       <div class="input-group">
         <label for="login-password">密码:</label>
@@ -17,7 +19,7 @@
 </template>
 
 <script setup>
-import {reactive, defineEmits,} from 'vue';
+import {reactive, defineEmits, ref, computed,} from 'vue';
 import { useRouter } from 'vue-router';
 import axios from "axios";
 import Qs from "qs"
@@ -30,6 +32,11 @@ const loginInfo = reactive({
 
 const emit = defineEmits(['switchState'])
 
+const error = ref('')
+
+const showError = computed(() => {
+  return error;
+});
 
 const submitLogin = () => {
   // 这里添加登录逻辑
@@ -43,6 +50,7 @@ const submitLogin = () => {
     if(res.data.state){
       router.push('/chatroom')
     }
+    error.value = res.data.message
   })
 };
 
