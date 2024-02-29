@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { ref} from 'vue';
+import {nextTick, ref} from 'vue';
 
 
 // 消息数组
@@ -34,6 +34,14 @@ const ws = ref({})
 
 // 新消息
 const newMessage = ref('');
+
+// 设置消息元素的引用
+const scrollToBottom = () => {
+  nextTick(() => {
+    const messagesContainer = document.querySelector(".messages");
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  });
+};
 
 // 发送消息方法 (这里你需要集成后端的消息发送逻辑)
 function sendMessage() {
@@ -65,6 +73,7 @@ function initWebSocket(){
   ws.value.onmessage = function (event) {
     const message = JSON.parse(event.data)
     messages.value.push(message);
+    scrollToBottom();
   }
   //连接关闭的回调方法
   ws.value.onclose = function () {
@@ -94,6 +103,11 @@ initWebSocket()
   overflow-y: auto;
   padding: 20px;
   background-image: url('https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/57533d91-6d1c-4fe8-4506-8924a686cd00/original=true/147597.jpeg'); /* 选择一张云朵图片作为背景 */
+}
+
+.messages::-webkit-scrollbar{
+  width: 0;
+  height: 0;
 }
 
 .message-content {
