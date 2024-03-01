@@ -54,6 +54,7 @@ const submitLogin = () => {
       localStorage.setItem('name',userInfo.name)
       localStorage.setItem('token',userInfo.token)
       router.push('/chatroom')
+      return
     }
     Swal.fire({
       icon: "error",

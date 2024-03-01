@@ -6,8 +6,16 @@
           :key="message.id"
           :class="{'my-message': message.isMine, 'other-message': !message.isMine}"
       >
-        <span class="username">{{ message.username }}:</span>
-        <div class="message-content">{{ message.content }}</div>
+        <!-- 消息块显示头像、用户名和消息 -->
+        <div class="message-block">
+          <!-- 如果不是自己的消息，显示用户头像 -->
+          <img :src="message.avatar" class="avatar" >
+          <div class="message-with-username">
+            <!-- 如果不是自己的消息，显示用户名 -->
+            <div class="message-username">{{ message.username }}</div>
+            <div class="message-content">{{ message.content }}</div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="input-area">
@@ -49,8 +57,9 @@ function sendMessage() {
     const message = {
       id: Date.now(),
       content: newMessage.value,
-      username: 'You', // 暂时标识为'You'——在实际应用中，你会根据用户数据来设置
-      isMine: true
+      username: localStorage.getItem('name'), // 暂时标识为'You'——在实际应用中，你会根据用户数据来设置
+      isMine: true,
+      avatar:require("C:\\Users\\Administrator\\Pictures\\Saved Pictures\\teat.jpg")
     };
     let text_data = JSON.stringify(message)
     ws.value.send(text_data)
@@ -110,32 +119,94 @@ initWebSocket()
   height: 0;
 }
 
+
+
+.message-block {
+  display: flex;
+  margin-bottom: 10px;
+  justify-content: flex-end;  /* This ensures the entire message block is aligned to the end (right) for 'my-message' */
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  margin-bottom: 5px;
+  /* Move the margin to the other side for .my-message */
+  margin-left: 10px;
+}
+
+.my-message .message-block {
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.my-message .avatar {
+  order: 2; /* 把头像放在最右边 */
+  margin-left: 10px; /* 和其他元素保持一定间距 */
+  align-self: auto; /* 重置对齐，由容器的align-items属性决定 */
+}
+
+.my-message .message-with-username {
+  order: 1; /* 使用户名和消息内容在头像的左边 */
+  align-items: flex-end; /* 右对齐用户名和消息 */
+}
+
+.other-message .message-block {
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
+.other-message .avatar {
+  order: 1; /* 把头像放在最左边 */
+  margin-right: 10px; /* 和其他元素保持一定间距 */
+  align-self: auto; /* 重置对齐，由容器的align-items属性决定 */
+}
+
+.other-message .message-with-username {
+  order: 2; /* 使用户名和消息内容在头像的左边 */
+  align-items: flex-start; /* 右对齐用户名和消息 */
+}
+
 .message-content {
-  display: inline-block;
+  max-width: 70%;
   padding: 10px 15px;
   border-radius: 18px;
   margin: 5px;
-  max-width: 70%;
-}
-
-.my-message {
-  text-align: right;
 }
 
 .my-message .message-content {
-  background-color: #9ad3bc; /* 清新的湖水蓝 */
+  background-color: #7cb342; /* 微信主题绿色 */
   color: white;
+  align-self: flex-end;
 }
 
 .other-message .message-content {
-  background-color: #ffffff; /* 朦胧的云朵白 */
-  color: #333;
+  background-color: #ffffff; /* 白色背景 */
+  color: black;
+  align-self: flex-start;
 }
 
-.username {
-  font-weight: bold;
-  margin-right: 6px;
+.my-message .message-username {
+  font-size: 12px;
+  color: black;
+  margin-left: 30px;
+  margin-bottom: 2px;
+
 }
+
+.other-message .message-username {
+  font-size: 12px;
+  color: black;
+  margin-left: -30px;
+  margin-bottom: 2px;
+
+}
+
+
+
+
+
 
 .input-area {
   display: flex;
