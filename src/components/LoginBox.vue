@@ -23,6 +23,7 @@ import { useRouter } from 'vue-router';
 import axios from "axios";
 import Qs from "qs"
 import Swal from 'sweetalert2'
+import {useStore} from "vuex";
 
 const router = useRouter();
 
@@ -37,7 +38,7 @@ const userInfo = reactive({
 })
 
 const emit = defineEmits(['switchState'])
-
+const store = useStore()
 
 const submitLogin = () => {
   // 这里添加登录逻辑
@@ -51,7 +52,14 @@ const submitLogin = () => {
     userInfo.name = loginInfo.name
     if(res.data.state){
       userInfo.token = res.data.token
-      localStorage.setItem('name',userInfo.name)
+      // 触发mutations，用于同步修改state的信息
+      // store.commit('updateInfo', 'nihao')
+      // 触发actions，用于异步修改state的信息
+      // store.dispatch('updateInfo', 'hi')
+      store.commit("saveUserInfo",{
+        headImg:'data:image/jpeg;base64,'+res.data.image,
+        nickName:userInfo.name
+      })
       localStorage.setItem('token',userInfo.token)
       router.push('/chatroom')
       return

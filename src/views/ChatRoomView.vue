@@ -32,7 +32,9 @@
 </template>
 
 <script setup>
-import {nextTick, ref} from 'vue';
+import {nextTick, onMounted, ref} from 'vue';
+import {useStore} from "vuex";
+import {useRouter} from "vue-router";
 
 
 // 消息数组
@@ -40,8 +42,25 @@ const messages = ref([]);
 
 const ws = ref({})
 
+const name = ref('')
+const headimg =ref('')
+const router = useRouter();
+const store = useStore()
+
 // 新消息
 const newMessage = ref('');
+
+onMounted(() => {
+
+  if(!localStorage.getItem('token')){
+    router.push('/')
+    return
+  }
+  name.value=store.state.userinfo.nickName
+  console.log(name)
+  headimg.value=store.state.userinfo.headImg
+  console.log(headimg)
+})
 
 // 设置消息元素的引用
 const scrollToBottom = () => {
@@ -57,9 +76,9 @@ function sendMessage() {
     const message = {
       id: Date.now(),
       content: newMessage.value,
-      username: localStorage.getItem('name'), // 暂时标识为'You'——在实际应用中，你会根据用户数据来设置
+      username: name.value, // 暂时标识为'You'——在实际应用中，你会根据用户数据来设置
       isMine: true,
-      avatar:require("C:\\Users\\Administrator\\Pictures\\Saved Pictures\\teat.jpg")
+      avatar:headimg.value //require("C:\\Users\\Administrator\\Pictures\\Saved Pictures\\teat.jpg")
     };
     let text_data = JSON.stringify(message)
     ws.value.send(text_data)
