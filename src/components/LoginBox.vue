@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import {reactive, defineEmits, ref, computed,} from 'vue';
+import {reactive, defineEmits, ref, computed, onMounted,} from 'vue';
 import { useRouter } from 'vue-router';
 import axios from "axios";
 import Qs from "qs"
@@ -29,6 +29,11 @@ const loginInfo = reactive({
   name: '',
   password: ''
 });
+
+const userInfo = reactive({
+  name:'',
+  token:''
+})
 
 const emit = defineEmits(['switchState'])
 
@@ -47,12 +52,22 @@ const submitLogin = () => {
     data:Qs.stringify(loginInfo)
   }).then((res)=>{
     console.log(res)
+    userInfo.name = loginInfo.name
     if(res.data.state){
+      userInfo.token = res.data.token
+      localStorage.setItem('name',userInfo.name)
+      localStorage.setItem('token',userInfo.token)
       router.push('/chatroom')
     }
     error.value = res.data.message
   })
 };
+
+onMounted(() => {
+  if(localStorage.getItem('token')){
+    router.push('/chatroom')
+  }
+})
 
 const switchToRegister = () => {
   emit('switchState','register')
