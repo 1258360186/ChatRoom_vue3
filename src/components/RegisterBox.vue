@@ -13,7 +13,6 @@
       <div class="input-group">
         <label for="register-repassword">确认密码:</label>
         <input id="register-repassword" type="password" v-model="registerInfo.repassword" required>
-        <span v-if="showPasswordMismatch" style="color: red;">密码不一致</span>
       </div>
       <button type="submit" class="auth-button">注册</button>
     </form>
@@ -23,6 +22,7 @@
 
 <script setup>
 import {reactive, defineEmits, computed} from 'vue';
+import Swal from 'sweetalert2'
 
 const registerInfo = reactive({
   email: '',
@@ -41,8 +41,13 @@ const submitRegister = () => {
     console.log('注册信息', registerInfo);
     // 假设注册成功后，导航至登录页面
     emit('switchState','login')
+    return
   }
-
+  Swal.fire({
+    icon: "error",
+    title: "注册失败",
+    text: "密码不一致",
+  });
 };
 
 const switchToLogin = () => {

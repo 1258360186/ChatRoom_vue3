@@ -1,7 +1,6 @@
 <template>
   <div class="auth-container">
     <h2>登录</h2>
-    <span v-if="showError" style="color: red;">{{error}}</span>
     <form @submit.prevent="submitLogin">
       <div class="input-group">
         <label for="login-name">用户名:</label>
@@ -19,10 +18,12 @@
 </template>
 
 <script setup>
-import {reactive, defineEmits, ref, computed, onMounted,} from 'vue';
+import {reactive, defineEmits,  onMounted,} from 'vue';
 import { useRouter } from 'vue-router';
 import axios from "axios";
 import Qs from "qs"
+import Swal from 'sweetalert2'
+
 const router = useRouter();
 
 const loginInfo = reactive({
@@ -37,11 +38,6 @@ const userInfo = reactive({
 
 const emit = defineEmits(['switchState'])
 
-const error = ref('')
-
-const showError = computed(() => {
-  return error;
-});
 
 const submitLogin = () => {
   // 这里添加登录逻辑
@@ -59,7 +55,11 @@ const submitLogin = () => {
       localStorage.setItem('token',userInfo.token)
       router.push('/chatroom')
     }
-    error.value = res.data.message
+    Swal.fire({
+      icon: "error",
+      title: "登陆失败",
+      text: res.data.message,
+    });
   })
 };
 
