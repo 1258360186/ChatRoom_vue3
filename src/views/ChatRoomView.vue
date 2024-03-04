@@ -4,7 +4,7 @@
       <div
           v-for="message in messages"
           :key="message.id"
-          :class="{'my-message': message.isMine, 'other-message': !message.isMine}"
+          :class="[message.username===name ?'my-message': 'other-message']"
       >
         <!-- 消息块显示头像、用户名和消息 -->
         <div class="message-block">
@@ -48,6 +48,7 @@ const token =ref('')
 const router = useRouter();
 const store = useStore()
 
+
 // 新消息
 const newMessage = ref('');
 
@@ -79,7 +80,6 @@ function sendMessage() {
       id: Date.now(),
       content: newMessage.value,
       username: name.value, // 暂时标识为'You'——在实际应用中，你会根据用户数据来设置
-      isMine: true,
       avatar:headimg.value //require("C:\\Users\\Administrator\\Pictures\\Saved Pictures\\teat.jpg")
     };
     let text_data = JSON.stringify(message)
