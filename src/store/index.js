@@ -4,7 +4,8 @@ export default createStore({
   state: {
     userinfo:{
       headImg:String,
-      nickName:String
+      nickName:String,
+      token:String
     }
   },
   getters: {

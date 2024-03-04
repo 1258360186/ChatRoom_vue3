@@ -44,6 +44,7 @@ const ws = ref({})
 
 const name = ref('')
 const headimg =ref('')
+const token =ref('')
 const router = useRouter();
 const store = useStore()
 
@@ -51,11 +52,12 @@ const store = useStore()
 const newMessage = ref('');
 
 onMounted(() => {
-
-  if(!localStorage.getItem('token')){
+  token.value=store.state.userinfo.token()
+  if(!token.value.trim()){
     router.push('/')
     return
   }
+  initWebSocket()
   name.value=store.state.userinfo.nickName
   console.log(name)
   headimg.value=store.state.userinfo.headImg
@@ -109,7 +111,7 @@ function initWebSocket(){
   }
 }
 
-initWebSocket()
+
 
 
 </script>

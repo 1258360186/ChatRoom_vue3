@@ -58,9 +58,10 @@ const submitLogin = () => {
       // store.dispatch('updateInfo', 'hi')
       store.commit("saveUserInfo",{
         headImg:'data:image/jpeg;base64,'+res.data.image,
-        nickName:userInfo.name
+        nickName:userInfo.name,
+        token:userInfo.token
       })
-      localStorage.setItem('token',userInfo.token)
+      //localStorage.setItem('token',userInfo.token)
       router.push('/chatroom')
       return
     }
