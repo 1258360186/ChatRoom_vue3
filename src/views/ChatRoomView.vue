@@ -52,7 +52,7 @@ const store = useStore()
 const newMessage = ref('');
 
 onMounted(() => {
-  token.value=store.state.userinfo.token()
+  token.value=store.state.userinfo.token
   if(!token.value.trim()){
     router.push('/')
     return
